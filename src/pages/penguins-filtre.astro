@@ -36,7 +36,7 @@ import Layout from "../layouts/Layout.astro";
         plotDiv.innerHTML = "<p>Aucune donnée pour cette espèce.</p>";
         return;
       }
-
+  
       const plot = Plot.plot({
         marks: [
           Plot.dot(filtered, {
