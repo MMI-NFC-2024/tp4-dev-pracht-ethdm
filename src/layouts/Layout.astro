@@ -1,26 +1,75 @@
 ---
 import "../styles/global.css";
+
 ---
 
-<!doctype html>
-<html lang="en">
+<html lang="fr">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="generator" content={Astro.generator} />
-    <title>Astro Basics</title>
+    <title>TP4 – Graphiques côté client</title>
   </head>
   <body>
-    <slot />
+    <header>
+      <nav class="menu">
+        <ul>
+          <li><a href="/">Accueil</a></li>
+          <li><a href="/simple">Graphique simple</a></li>
+
+          <li><a href="/penguin">Penguins</a></li>
+          <li><a href="/penguins-filtre">Filtre Penguins</a></li>
+          <li><a href="/penguins-multi-filtre">Multi-filtres Penguins</a></li>
+
+          <li><a href="/industries">Industries</a></li>
+          <li><a href="/industries-filter">Filtres Industries</a></li>
+
+          <li><a href="/weather-filter">Filtres Weathers</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main>
+      <slot />
+    </main>
   </body>
 </html>
 
 <style>
-  html,
-  body {
+  .menu {
+    background: #2c3e50;
+    padding: 1rem 2rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+
+  .menu ul {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
     margin: 0;
-    width: 100%;
-    height: 100%;
+    padding: 0;
+  }
+
+  .menu li {
+    margin: 0;
+  }
+
+  .menu a {
+    color: #ecf0f1;
+    text-decoration: none;
+    font-weight: 500;
+    padding: 0.4rem 0.8rem;
+    border-radius: 4px;
+    transition: background 0.2s ease;
+  }
+
+  .menu a:hover {
+    background: #1abc9c;
+    color: #fff;
+  }
+
+  @media (max-width: 700px) {
+    .menu ul {
+      flex-direction: column;
+    }
   }
 </style>

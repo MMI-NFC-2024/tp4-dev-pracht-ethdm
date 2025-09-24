@@ -1,0 +1,62 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+<Layout>
+  <main>
+    <h2>Chômage par secteur</h2>
+    <div>
+      <label for="industry">Secteur :</label>
+      <select id="industry"><option value="">Tous</option></select>
+
+      <label for="minUnemployed">Min chômeurs :</label>
+      <input type="number" id="minUnemployed" placeholder="-" />
+
+      <label for="maxUnemployed">Max chômeurs :</label>
+      <input type="number" id="maxUnemployed" placeholder="-" />
+    </div>
+
+    <div id="plot"></div>
+  </main>
+
+  <script type="module">
+    import * as Plot from "@observablehq/plot";
+    import industries from "../assets/industries.json";
+
+    const $ = id => document.getElementById(id);
+    const plotDiv = $("plot");
+
+    const sectors = [...new Set(industries.map(d => d.industry))];
+    for (const sector of sectors) {
+      const opt = document.createElement("option");
+      opt.value = sector;
+      opt.textContent = sector;
+      $("industry").appendChild(opt);
+    }
+
+    function render() {
+      let data = industries;
+      if ($("industry").value) data = data.filter(d => d.industry === $("industry").value);
+      if ($("minUnemployed").value) data = data.filter(d => d.unemployed >= +$("minUnemployed").value);
+      if ($("maxUnemployed").value) data = data.filter(d => d.unemployed <= +$("maxUnemployed").value);
+
+      plotDiv.innerHTML = "";
+      if (!data.length) return plotDiv.innerHTML = "<p>Aucune donnée.</p>";
+
+      const plot = Plot.plot({
+        marks: [
+          Plot.lineY(data, { x: d => new Date(d.date), y: "unemployed", stroke: "industry" }),
+          Plot.dot(data, { x: d => new Date(d.date), y: "unemployed", fill: "industry", r: 3 })
+        ],
+        x: { label: "Date", type: "utc" },
+        y: { label: "Chômeurs" },
+        width: 800,
+        height: 400
+      });
+
+      plotDiv.appendChild(plot);
+    }
+
+    ["industry", "minUnemployed", "maxUnemployed"].forEach(id => $(id).addEventListener("input", render));
+    render();
+  </script>
+</Layout>

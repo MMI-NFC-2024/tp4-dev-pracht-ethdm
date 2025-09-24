@@ -1,0 +1,60 @@
+---
+import Layout from "../layouts/Layout.astro";
+
+
+---
+
+<Layout>
+  <main>
+    <h2>Filtrer par espèce</h2>
+
+
+    <select id="species">
+      <option value="">Toutes les espèces</option>
+      <option value="Adelie">Adelie</option>
+      <option value="Chinstrap">Chinstrap</option>
+      <option value="Gentoo">Gentoo</option>
+    </select>
+
+    <div id="plot"></div>
+  </main>
+
+  <script >
+    import * as Plot from "@observablehq/plot";
+    import penguins from "../assets/penguins.json";
+
+    const selectSpecies = document.getElementById("species");
+    const plotDiv = document.getElementById("plot");
+
+    function renderPlot() {
+      const species = selectSpecies.value;
+      const filtered = species ? penguins.filter(p => p.species === species) : penguins;
+
+      plotDiv.innerHTML = "";
+
+      if (filtered.length === 0) {
+        plotDiv.innerHTML = "<p>Aucune donnée pour cette espèce.</p>";
+        return;
+      }
+
+      const plot = Plot.plot({
+        marks: [
+          Plot.dot(filtered, {
+            x: "culmen_length_mm",
+            y: "culmen_depth_mm",
+            stroke: "species",
+            tooltip: "species"
+          })
+        ],
+        width: 600,
+        height: 400
+      });
+
+      plotDiv.appendChild(plot);
+    }
+
+    selectSpecies.addEventListener("change", renderPlot);
+    renderPlot();
+  </script>
+</Layout>
+

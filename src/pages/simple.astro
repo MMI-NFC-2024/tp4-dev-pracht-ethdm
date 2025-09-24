@@ -1,0 +1,28 @@
+---
+import Layout from "../layouts/Layout.astro";
+import PlotFigure from "../components/PlotFigure.astro";
+import * as Plot from "@observablehq/plot";
+import penguins from "../assets/penguins.json";
+---
+
+<Layout>
+  <main>
+    <h2>Graphique simple</h2>
+    <PlotFigure />
+    <div id="plot"></div>
+  </main>
+
+  <script type="module">
+    import * as Plot from "@observablehq/plot";
+
+    const data = Array.from({ length: 10 }, (_, i) => ({ x: i, y: Math.random() }));
+
+    const plot = Plot.plot({
+      marks: [Plot.barY(data, { x: "x", y: "y" })],
+      width: 600,
+      height: 400
+    });
+
+    document.getElementById("plot").appendChild(plot);
+  </script>
+</Layout>
