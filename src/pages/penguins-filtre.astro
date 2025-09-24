@@ -25,7 +25,7 @@ import Layout from "../layouts/Layout.astro";
 
     const selectSpecies = document.getElementById("species");
     const plotDiv = document.getElementById("plot");
-
+ 
     function renderPlot() {
       const species = selectSpecies.value;
       const filtered = species ? penguins.filter(p => p.species === species) : penguins;
